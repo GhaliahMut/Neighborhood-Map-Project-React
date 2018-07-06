@@ -7,7 +7,6 @@ import $ from 'jquery'
 
 let markers = [];
 let infoWindows = [];
-let contentString ='';
 
 export default class AppContainer extends Component {
   constructor(props){
@@ -26,13 +25,16 @@ export default class AppContainer extends Component {
         { name: "Gamla Stan", location: {lat: 59.3256984, lng: 18.0718788}}
       ],
       map: {},
-      query: ''
+      query: '', 
+      //data: []
     }
   }
 
   updatequery = (query) => {
     this.setState({ query: query})
   }
+
+
 
 
 /* Load Map using react-google-maps*/
@@ -56,9 +58,11 @@ export default class AppContainer extends Component {
 
       /*Add info windows and content to map*/
       this.state.locations.forEach( location => {
+      	let contentString =''
 
         let infoWindow = new google.maps.InfoWindow({
-          name: location.name
+          name: location.name,
+          content: contentString
         });
 
         let bounds = new google.maps.LatLngBounds();
@@ -84,17 +88,25 @@ export default class AppContainer extends Component {
 		        async: false,
 		        dataType: 'json',
 		        success: function(data, status, jqXHR){
-		          console.log(data);
+		        	
+		        	console.log(data);
 		         /* the problem is in for loop here, it keeps printing the last array's data
 		         I should loop here and make counter equals to locations.length
 		         */
-		          for(let i=0; i<data[1].length; i++){
-		            infoWindow.setContent(`<div id="infoWindow-content" tabIndex="0" role="contentinfo">
+		         
+		         	if(data[0].length !== 0) {
+			        for(let i=0; i<data[1].length; i++){
+			            infoWindow.setContent(contentString = `<div id="infoWindow-content" tabIndex="0" role="contentinfo">
 		                <h2>`+data[1][i]+`</h2>
 		                <p>`+data[2][i]+`</p>
 		                <a href="`+data[3][i]+`" target="_blank">Visit Wikipedia for more info</a>
 		              </div>`);
-		          }
+			        }
+			      } else {
+			       	console.log("No Contents Have Been Found Try to Search Manually")
+			      }
+		         
+		          
 		        },
 		    })
 		    .done(function(){
@@ -134,7 +146,7 @@ export default class AppContainer extends Component {
 	          if (infoWindow.name === marker.title ) {
 		        console.log(infoWindow.name);
 		        infoWindows.forEach(info => {info.close() });
-	            //infoWindow.setContent();
+	           // infoWindow.setContent(contentString);
 	            infoWindow.open(this.props.map, marker);
 	            if(marker.getAnimation() !== null){
 	            marker.setAnimation(null);
