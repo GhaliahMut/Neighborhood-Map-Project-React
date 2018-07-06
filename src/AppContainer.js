@@ -16,14 +16,14 @@ export default class AppContainer extends Component {
 
     this.state = {
       locations: [
-        { name: "Stockholm Palace", location: {lat: 59.3268215, lng: 18.0717194}, address: "107 70 Stockholm, Sweden" },
-        { name: "Djurgården", location: {lat: 59.326284, lng: 18.1132151}, address: "Östermalm, Stockholm, Sweden" },
-        { name: "Gröna Lund", location: {lat: 59.3233564, lng: 18.0963901}, address: "Lilla Allmänna Gränd 9, 115 21 Stockholm, Sweden" },
-        { name: "Royal Swedish Opera", location: {lat: 59.3296484, lng: 18.0700013}, address: "Gustav Adolfs torg 2, 103 22 Stockholm, Sweden"},
-        { name: "Royal National City Park", location: {lat: 59.3267016, lng: 18.1267892}, address: "115 21 Stockholm, Sweden" },
-        { name: "Moderna Museet", location: {lat: 59.3260466, lng: 18.0846878}, address: "Exercisplan 4, 111 49 Stockholm, Sweden" },
-        { name: "Vasa Museum", location: {lat: 59.3280233, lng: 18.0913964}, address: "Galärvarvsvägen 14, 115 21 Stockholm, Sweden" },
-        { name: "Gamla Stan", location: {lat: 59.3256984, lng: 18.0718788}, address: "Södermalm, Stockholm, Sweden" }
+        { name: "Stockholm Palace", location: {lat: 59.3268215, lng: 18.0717194}},
+        { name: "ABBA The Museum", location: {lat: 59.324893, lng: 18.0965639}},
+        { name: "Gröna Lund", location: {lat: 59.3233564, lng: 18.0963901}},
+        { name: "Royal Swedish Opera", location: {lat: 59.3296484, lng: 18.0700013}},
+        { name: "Fotografiska", location: {lat: 59.3178415, lng: 18.0859104}},
+        { name: "Moderna Museet", location: {lat: 59.3260466, lng: 18.0846878}},
+        { name: "Vasa Museum", location: {lat: 59.3280233, lng: 18.0913964}},
+        { name: "Gamla Stan", location: {lat: 59.3256984, lng: 18.0718788}}
       ],
       map: {},
       query: ''
