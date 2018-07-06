@@ -77,8 +77,37 @@ export default class AppContainer extends Component {
         /*Add click listenr and animation on marker when openinig info windows*/
 
         marker.addListener('click', function() {
-          infoWindows.forEach(info => {info.close() });
-          infoWindow.setContent(contentString);
+        	$.ajax({
+		        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker.title +'&format=json&callback=?',
+		        type: 'GET',
+		        contentType: "application/json; charset=utf-8",
+		        async: false,
+		        dataType: 'json',
+		        success: function(data, status, jqXHR){
+		          console.log(data);
+		         /* the problem is in for loop here, it keeps printing the last array's data
+		         I should loop here and make counter equals to locations.length
+		         */
+		          for(let i=0; i<data[1].length; i++){
+		            infoWindow.setContent(`<div id="infoWindow-content" tabIndex="0" role="contentinfo">
+		                <h2>`+data[1][i]+`</h2>
+		                <p>`+data[2][i]+`</p>
+		                <a href="`+data[3][i]+`" target="_blank">Visit Wikipedia for more info</a>
+		              </div>`);
+		          }
+		        },
+		    })
+		    .done(function(){
+		        console.log("success")
+		    })
+		    .fail(function(){
+		        console.log("error")
+		    })
+		    .always(function(){
+		        console.log("complete")
+		    })
+
+	        infoWindows.forEach(info => {info.close() });
             infoWindow.open(map, marker);
             if(marker.getAnimation() !== null){
               marker.setAnimation(null);
@@ -97,19 +126,21 @@ export default class AppContainer extends Component {
   /*Add animation on marker and openinig info windows when a list item clicked*/
 
    openMarker(e) {
-    markers.map(marker => {
-      if (e.target.value === marker.title) {
-        infoWindows.map(infoWindow => {
-          if (marker.title === infoWindow.name) {
-            console.log(infoWindow.name);
-            infoWindows.forEach(info => {info.close() });
-            infoWindow.setContent(contentString);
-            infoWindow.open(this.props.map, marker);
-            if(marker.getAnimation() !== null){
-            marker.setAnimation(null);
-            } else {
-            marker.setAnimation(window.google.maps.Animation.BOUNCE)
-            setTimeout(()=> {marker.setAnimation(null);}, 900)
+
+	    markers.map(marker => {
+	      if (e.target.value === marker.title) {
+
+	        infoWindows.map(infoWindow => {
+	          if (infoWindow.name === marker.title ) {
+		        console.log(infoWindow.name);
+		        infoWindows.forEach(info => {info.close() });
+	            //infoWindow.setContent();
+	            infoWindow.open(this.props.map, marker);
+	            if(marker.getAnimation() !== null){
+	            marker.setAnimation(null);
+	            } else {
+	            marker.setAnimation(window.google.maps.Animation.BOUNCE)
+	            setTimeout(()=> {marker.setAnimation(null);}, 900)
             }
           }
         })
@@ -120,39 +151,7 @@ export default class AppContainer extends Component {
  componentDidMount() {
     
       //let searchTerm = "Vasa Museum";
-      this.state.locations.forEach( location => {
-        $.ajax({
-        url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ location.name +'&format=json&callback=?',
-        type: 'GET',
-        contentType: "application/json; charset=utf-8",
-        async: false,
-        dataType: 'json',
-        success: function(data, status, jqXHR){
-          console.log(data);
-         /* the problem is in for loop here, it keeps printing the last array's data
-         I should loop here and make counter equals to locations.length
-         */
-          for(let i=0; i<data[1].length; i++){
-            contentString = 
-              `<div id="infoWindow-content" tabIndex="0" role="contentinfo">
-                <h2>`+data[1][i]+`</h2>
-                <p>`+data[2][i]+`</p>
-                <a href="`+data[3][i]+`" target="_blank">Visit Wikipedia for more info</a>
-              </div>`;
-          }
-        },
-      })
-      .done(function(){
-        console.log("success")
-      })
-      .fail(function(){
-        console.log("error")
-      })
-      .always(function(){
-        console.log("complete")
-      })
-
-      })
+      
       
 
     this.loadMap(); 
